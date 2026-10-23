@@ -1,0 +1,26 @@
+@theme {
+  --color-primary: #22c55e;
+  --color-dark: #07110c;
+  --color-surface: #112018;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #07110c;
+  color: white;
+  font-family: "Poppins", sans-serif;
+}
+
+button,
+a {
+  transition: all 0.3s ease;
+}
+
+::selection {
+  background: #22c55e;
+  color: #07110c;
+}
