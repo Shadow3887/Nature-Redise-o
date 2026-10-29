@@ -19,7 +19,7 @@ export const characters = [
     id: 3,
     name: "Devastador",
     role: "Villano principal",
-    image: "/images/devastador.png",
+    image: "/public/img/devastatador.jpg",
     description:
       "Un poderoso enemigo que busca destruir el equilibrio natural."
   }
