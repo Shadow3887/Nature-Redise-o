@@ -1,7 +1,12 @@
 
 import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Download, ArrowRight } from "lucide-react";
+import {
+  Download,
+  ArrowRight,
+  LogIn,
+  UserPlus
+} from "lucide-react";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -16,18 +21,16 @@ function Navbar() {
     { name: "Contacto", path: "/contact" },
   ];
 
-  // Cerrar menú al cambiar de página
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
 
-  // Cerrar con Escape y bloquear scroll
   useEffect(() => {
     const handleEscape = (event) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-      }
+      if (event.key === "Escape") setOpen(false);
     };
+
+    const previousOverflow = document.body.style.overflow;
 
     if (open) {
       document.body.style.overflow = "hidden";
@@ -35,7 +38,7 @@ function Navbar() {
     }
 
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleEscape);
     };
   }, [open]);
@@ -49,15 +52,15 @@ function Navbar() {
       >
         <nav
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8
-          h-18 sm:h-20 flex items-center justify-between gap-3"
+          min-h-18 sm:min-h-20 flex items-center
+          justify-between gap-3"
         >
-
           {/* LOGO */}
           <Link
             to="/"
             onClick={() => setOpen(false)}
-            className="flex items-center gap-2 sm:gap-3 group
-            min-w-0 shrink-0"
+            className="flex items-center gap-2 sm:gap-3
+            group min-w-0 shrink-0"
           >
             <img
               src="/img/Nature Defender.png"
@@ -69,7 +72,7 @@ function Navbar() {
             />
 
             <span
-              className="text-base sm:text-xl lg:text-2xl
+              className="text-base sm:text-xl
               font-extrabold tracking-tight leading-tight"
             >
               Nature
@@ -77,51 +80,75 @@ function Navbar() {
             </span>
           </Link>
 
-          {/* MENÚ DESKTOP */}
-          <div className="hidden lg:flex items-center gap-5 xl:gap-7">
-            {links.filter(link => link.path !== "/download").map((link) => (
-              <NavLink
-                key={link.path}
-                to={link.path}
-                end={link.path === "/"}
-                className={({ isActive }) =>
-                  `relative text-sm xl:text-base font-medium
-                  transition-colors duration-300
-                  after:absolute after:left-0 after:-bottom-2
-                  after:h-[2px] after:bg-green-400
-                  after:transition-all after:duration-300
-                  ${
-                    isActive
-                      ? "text-green-400 after:w-full"
-                      : "text-gray-300 hover:text-green-400 after:w-0 hover:after:w-full"
-                  }`
-                }
-              >
-                {link.name}
-              </NavLink>
-            ))}
+          {/* NAVEGACIÓN DESKTOP */}
+          <div className="hidden xl:flex items-center gap-4">
+            {links
+              .filter((link) => link.path !== "/download")
+              .map((link) => (
+                <NavLink
+                  key={link.path}
+                  to={link.path}
+                  end={link.path === "/"}
+                  className={({ isActive }) =>
+                    `text-sm font-medium whitespace-nowrap
+                    transition-colors duration-300 ${
+                      isActive
+                        ? "text-green-400"
+                        : "text-gray-300 hover:text-green-400"
+                    }`
+                  }
+                >
+                  {link.name}
+                </NavLink>
+              ))}
 
             <Link
               to="/download"
               className="flex items-center gap-2
               bg-green-500 hover:bg-green-400
               text-black font-bold text-sm
-              px-5 py-3 rounded-xl
-              hover:scale-105 transition-all duration-300"
+              px-4 py-3 rounded-xl transition"
             >
-              <Download size={18} />
+              <Download size={17} />
               Descargar
+            </Link>
+
+            {/* BOTÓN LOGIN */}
+            <Link
+              to="/login"
+              className="flex items-center gap-2
+              border border-green-500/50
+              text-green-400 hover:bg-green-500/10
+              px-4 py-3 rounded-xl
+              text-sm font-semibold whitespace-nowrap
+              transition-all duration-300"
+            >
+              <LogIn size={17} />
+              Login
+            </Link>
+
+            {/* BOTÓN REGISTER */}
+            <Link
+              to="/register"
+              className="flex items-center gap-2
+              bg-green-600 hover:bg-green-500
+              text-white px-4 py-3 rounded-xl
+              text-sm font-semibold whitespace-nowrap
+              transition-all duration-300"
+            >
+              <UserPlus size={17} />
+              Register
             </Link>
           </div>
 
-          {/* BOTÓN HAMBURGUESA ANIMADO */}
+          {/* BOTÓN HAMBURGUESA */}
           <button
             type="button"
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpen((prev) => !prev)}
             aria-label={open ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={open}
             aria-controls="mobile-navigation"
-            className="lg:hidden relative z-[70]
+            className="xl:hidden relative z-[70]
             w-11 h-11 flex flex-col
             items-center justify-center gap-[6px]
             rounded-xl bg-green-500/10
@@ -134,13 +161,11 @@ function Navbar() {
               rounded-full transition-all duration-300
               ${open ? "translate-y-[8px] rotate-45" : ""}`}
             />
-
             <span
               className={`block w-6 h-[2px] bg-green-400
               rounded-full transition-all duration-300
               ${open ? "opacity-0 scale-0" : ""}`}
             />
-
             <span
               className={`block w-6 h-[2px] bg-green-400
               rounded-full transition-all duration-300
@@ -150,21 +175,20 @@ function Navbar() {
         </nav>
       </header>
 
-      {/* FONDO OSCURO DEL MENÚ */}
+      {/* FONDO OSCURO */}
       <div
         onClick={() => setOpen(false)}
         aria-hidden="true"
-        className={`fixed inset-0 z-[55] lg:hidden
+        className={`fixed inset-0 z-[55] xl:hidden
         bg-black/70 backdrop-blur-sm
-        transition-opacity duration-300
-        ${
+        transition-opacity duration-300 ${
           open
             ? "opacity-100 visible"
             : "opacity-0 invisible pointer-events-none"
         }`}
       />
 
-      {/* MENÚ LATERAL MÓVIL */}
+      {/* MENÚ LATERAL RESPONSIVE */}
       <aside
         id="mobile-navigation"
         aria-label="Menú de navegación móvil"
@@ -174,19 +198,16 @@ function Navbar() {
         h-dvh w-[85%] max-w-[350px]
         bg-[#0b1810]
         border-l border-green-900/50
-        shadow-2xl lg:hidden
+        shadow-2xl xl:hidden
         flex flex-col
-        transition-transform duration-300 ease-in-out
-        ${
-          open
-            ? "translate-x-0"
-            : "translate-x-full"
+        transition-transform duration-300 ease-in-out ${
+          open ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        {/* CABECERA DEL MENÚ */}
+        {/* CABECERA */}
         <div
           className="flex items-center gap-3
-          px-6 py-6 border-b border-green-900/40"
+          px-5 py-6 border-b border-green-900/40"
         >
           <img
             src="/img/Nature Defender.png"
@@ -199,16 +220,15 @@ function Navbar() {
               Nature
               <span className="text-green-400"> Defender</span>
             </h2>
-
             <p className="text-xs text-gray-400">
               Explora nuestra aventura
             </p>
           </div>
         </div>
 
-        {/* ENLACES MÓVILES */}
-        <div className="flex-1 overflow-y-auto px-5 py-8">
-          <nav className="flex flex-col gap-3">
+        {/* ENLACES */}
+        <div className="flex-1 overflow-y-auto px-5 py-6">
+          <nav className="flex flex-col gap-2">
             {links.map((link, index) => (
               <NavLink
                 key={link.path}
@@ -216,19 +236,18 @@ function Navbar() {
                 end={link.path === "/"}
                 onClick={() => setOpen(false)}
                 style={{
-                  transitionDelay: open ? `${index * 45}ms` : "0ms"
+                  transitionDelay: open
+                    ? `${index * 40}ms`
+                    : "0ms"
                 }}
                 className={({ isActive }) =>
                   `flex items-center justify-between
-                  px-5 py-4 rounded-xl
-                  font-medium text-base
-                  border transition-all duration-300
-                  ${
+                  px-5 py-3 rounded-xl font-medium
+                  border transition-all duration-300 ${
                     isActive
                       ? "bg-green-500/15 text-green-400 border-green-500/30"
                       : "text-gray-300 border-transparent hover:bg-green-500/10 hover:text-green-400"
-                  }
-                  ${
+                  } ${
                     open
                       ? "translate-x-0 opacity-100"
                       : "translate-x-5 opacity-0"
@@ -242,21 +261,32 @@ function Navbar() {
           </nav>
         </div>
 
-        {/* PARTE INFERIOR */}
-        <div className="p-6 border-t border-green-900/40">
+        {/* BOTONES DE AUTENTICACIÓN */}
+        <div className="p-5 border-t border-green-900/40 space-y-3">
           <Link
-            to="/download"
+            to="/login"
             onClick={() => setOpen(false)}
             className="flex items-center justify-center gap-3
-            w-full bg-green-500 hover:bg-green-400
-            text-black font-bold py-4 rounded-xl
-            transition-all duration-300"
+            w-full border border-green-500/50
+            text-green-400 font-bold py-3 rounded-xl
+            hover:bg-green-500/10 transition"
           >
-            <Download size={20} />
-            Descargar juego
+            <LogIn size={20} />
+            Iniciar sesión
           </Link>
 
-          <p className="text-gray-500 text-xs text-center mt-5">
+          <Link
+            to="/register"
+            onClick={() => setOpen(false)}
+            className="flex items-center justify-center gap-3
+            w-full bg-green-600 hover:bg-green-500
+            text-white font-bold py-3 rounded-xl transition"
+          >
+            <UserPlus size={20} />
+            Registrarse
+          </Link>
+
+          <p className="text-gray-500 text-xs text-center pt-2">
             © {new Date().getFullYear()} Nature Defender
           </p>
         </div>
