@@ -11,7 +11,7 @@ export const characters = [
     id: 2,
     name: "Toxzon",
     role: "Enemigo",
-    image: "/images/toxzon.png",
+    image: "/public/img/ojo.jpg",
     description:
       "Una criatura contaminante que amenaza los ecosistemas."
   },
